@@ -1,0 +1,139 @@
+
+*** INSTRUKSI UNTUK AI (ChatGPT/Claude/Gemini) ***
+
+Bertindaklah sebagai mahasiswa Teknik Informatika tingkat akhir yang sedang menyusun **Manual Book (Laporan Praktikum)** untuk mata kuliah Rekayasa Perangkat Lunak 2.
+
+**Tugas:**
+Buatlah sebuah Manual Book lengkap untuk proyek "Aplikasi Manajemen Jadwal Dokter" (Doctor Schedule Management).
+Manual Book ini harus MENIRU STRUKTUR DAN GAYA BAHASA dari referensi file PDF "Manual Book_Kautsar Hasby D.F_4IA20_50422770.pdf" yang memiliki bab:
+1.  **Cover** (Format standar Gunadarma)
+2.  **BAB I: PENDAHULUAN** (Latar Belakang, Tujuan)
+3.  **BAB II: PEMBAHASAN** (Teori singkat: NetBeans, Java, JDBC/JPA, MySQL)
+4.  **BAB III: ANALISA DAN PERANCANGAN** (Penjelasan Struktur Proyek, Model, Service, Controller, GUI dengan potongan kode dan penjelasan fungsinya).
+5.  **BAB IV: PENUTUP** (Kesimpulan, Saran)
+
+**Konteks Proyek:**
+-   **Judul Aplikasi**: Manajemen Jadwal Dokter (Doctor Schedule).
+-   **Teknologi**: Java Desktop (Swing), Maven, Hibernate (JPA) untuk database, MySQL.
+-   **Arsitektur**: MVC (Model-View-Controller) dengan Service Layer.
+-   **IDE**: NetBeans.
+
+**Bahan Baku (Source Code):**
+Gunakan kode asli berikut ini sebagai isi dari **BAB III (Analisa dan Perancangan)**. Jelaskan kode ini seperti yang dilakukan di file referensi (menjelaskan anotasi @Entity, fungsi method CRUD, dll).
+
+---
+**1. Model: DoctorSchedule.java**
+```java
+package com.mycompany.rpl_ujian.model;
+import javax.persistence.*;
+
+@Entity
+@Table(name = "doctor_schedule")
+public class DoctorSchedule {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    
+    @Column(name = "doctor_name")
+    private String doctorName;
+    
+    @Column(name = "specialist")
+    private String specialist;
+    
+    @Column(name = "day")
+    private String day;
+    
+    @Column(name = "time")
+    private String time;
+
+    // Getters dan Setters (asumsikan ada)
+}
+```
+*Penjelasan untuk AI*: Jelaskan bahwa class ini adalah Entity yang memetakan tabel `doctor_schedule`.
+
+---
+**2. Service: DoctorScheduleService.java**
+```java
+package com.mycompany.rpl_ujian.service;
+
+import com.mycompany.rpl_ujian.model.DoctorSchedule;
+import com.mycompany.rpl_ujian.repository.DoctorScheduleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class DoctorScheduleService {
+    @Autowired
+    private DoctorScheduleRepository repository;
+
+    public DoctorSchedule save(DoctorSchedule schedule) {
+        return repository.save(schedule);
+    }
+
+    public List<DoctorSchedule> findAll() {
+        return repository.findAll();
+    }
+
+    public void delete(int id) {
+        repository.deleteById(id);
+    }
+    
+    public Optional<DoctorSchedule> findById(int id) {
+        return repository.findById(id);
+    }
+}
+```
+*Penjelasan untuk AI*: Jelaskan bahwa Service ini menangani logika bisnis dan memanggil Repository. (Catatan: Jika proyek aslinya tidak pakai Spring, sesuaikan penjelasannya bahwa ini mengatur transaksi JPA).
+
+---
+**3. Controller: DoctorController.java**
+```java
+package com.mycompany.rpl_ujian.controller;
+
+import com.mycompany.rpl_ujian.model.DoctorSchedule;
+import com.mycompany.rpl_ujian.service.DoctorScheduleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import java.util.List;
+
+@Controller
+public class DoctorController {
+    @Autowired
+    private DoctorScheduleService service;
+
+    public void addSchedule(String name, String specialist, String day, String time) {
+        DoctorSchedule schedule = new DoctorSchedule();
+        schedule.setDoctorName(name);
+        schedule.setSpecialist(specialist);
+        schedule.setDay(day);
+        schedule.setTime(time);
+        service.save(schedule);
+    }
+
+    public List<DoctorSchedule> getAllSchedules() {
+        return service.findAll();
+    }
+
+    public void deleteSchedule(int id) {
+        service.delete(id);
+    }
+}
+```
+*Penjelasan untuk AI*: Jelaskan bahwa Controller menjadi penghubung antara View dan Service.
+
+---
+**4. View: DoctorSchedulePanel.java**
+(Deskripsikan saja komponennya karena kodenya panjang)
+- Class ini `extends JPanel`.
+- Memiliki `JTable` untuk menampilkan data dokter.
+- Memiliki `JTextField` untuk input: Nama Dokter, Spesialis, Hari, Jam.
+- Memiliki Tombol: Simpan, Update, Hapus, Clear.
+- Saat tombol Simpan ditekan, ia memanggil `controller.addSchedule(...)`.
+- Saat panel dibuka, tabel diisi menggunakan data dari `controller.getAllSchedules()`.
+
+---
+
+**Output yang Diharapkan:**
+Hasilkan teks lengkap dalam format docx yang kamu lihat tadi yang bisa langsung saya copy-paste menjadi file dokumen. Gunakan bahasa Indonesia yang formal dan akademis. Pastikan ada placeholder `[Gambar x: Keterangan]` untuk tempat saya menaruh screenshot nanti.
